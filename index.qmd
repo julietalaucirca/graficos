@@ -1,0 +1,105 @@
+---
+title: "Graficos del sistema base de R"
+subtitle: "Curso PF 0953-01"
+author: "Julieta Laucirica"
+date: "2024-10-03"
+format:
+  html:
+    toc: true
+theme: yeti
+lang: es
+---
+
+```{r}
+
+library(tidyverse)
+library(palmerpenguins)
+```
+
+
+## Graficos base en R
+
+### Grafico de dispersion
+
+```{r}
+#| label: grafico-dispersion-cars
+#| code-fold: true
+plot(cars)
+```
+
+```{r}
+plot(
+ x=airquality$Temp,
+ y=airquality$Ozone,
+ xlab="Temperatura (F)",
+ ylab="Ozono (U.D)",
+ main="Relación entre Temperatura y Ozono en la calidad del aire"
+)
+```
+
+### Grafico de barras
+
+```{r}
+personas_colorpelo <- aggregate(Freq ~ Hair, data = HairEyeColor, FUN = sum)
+barplot(
+ personas_colorpelo$Freq,
+ names.arg = personas_colorpelo$Hair,
+ main = "Cantidad de personas según color de pelo",
+ xlab = "Color de pelo",
+ ylab = "Número de personas"
+)
+```
+
+### Grafico de pie
+```{r}
+data("HairEyeColor")
+personas_colorojos <- aggregate(Freq ~ Eye, data = HairEyeColor, FUN = sum)
+pie(
+ x= personas_colorojos$Freq,
+ main = "Distribucion de personas por color de ojos",
+ labels = paste(personas_colorojos$Eye, ":", personas_colorojos$Freq)
+)
+```
+
+### Histograma
+```{r}
+data(airquality)
+hist(airquality$Temp,
+ main = "Histograma de Temperatura",
+ xlab = "Temperatura (F)",
+ ylab = "Cantidad de días"
+)
+```
+
+
+###Relacion entre la longitud del pico y la masa de pinguinos
+
+```{r}
+# Gráfico de dispersión de longitud del pico vs masa (peso)
+penguins |>
+  ggplot(aes(x = bill_length_mm, y = body_mass_g)) +
+  geom_point(size = 2) +
+  geom_smooth(method = "loess", se = FALSE) +
+  ggtitle("Longitud del pico vs. masa") +
+  xlab("Longitud del pico (mm)") +
+  ylab("Masa (g)") +
+  labs(color = "Especie", shape = "Especie")
+```
+
+
+
+```{r}
+# Gráfico de dispersión de longitud del pico vs masa (peso) por especie
+penguins |>
+  ggplot(aes(x = bill_length_mm, y = body_mass_g)) +
+  geom_point(aes(color = species,
+                 shape = species),
+             size = 2) +
+  geom_smooth(method = "lm", se = FALSE, aes(color = species)) +
+  scale_color_manual(values = c("darkorange", "darkorchid", "cyan4")) +
+  ggtitle("Longitud del pico vs. masa por especie") +
+  xlab("Longitud del pico (mm)") +
+  ylab("Masa (g)") +
+  labs(color = "Especie", shape = "Especie")
+```
+
